@@ -70,15 +70,17 @@ export function getInitialTheme<T extends string>(
 }
 
 export function setBodyClassList<T extends string>(themes: (Theme | T)[], theme: Theme | T): void {
-  const bodyThemeClassList = themes.find(theme => document.body.classList.contains(theme))
+  const bodyThemeClassList = themes.find(theme =>
+    document.body.classList.contains(`theme-${theme}`)
+  )
 
   if (bodyThemeClassList && bodyThemeClassList === theme) {
     return
   }
 
   if (bodyThemeClassList === undefined) {
-    document.body.classList.add(theme)
+    document.body.classList.add(`theme-${theme}`)
   } else {
-    document.body.classList.replace(bodyThemeClassList, theme)
+    document.body.classList.replace(`theme-${bodyThemeClassList}`, `theme-${theme}`)
   }
 }

@@ -1,21 +1,59 @@
 import { Theme } from './Theme.types'
 
-export const themes = ['dark', 'light']
+const EXPIRE_DURATION = 24 * 60 * 60 * 1000 // 24 hours
 
-export function isTheme(tested: string): tested is Theme {
+export const isBrowser = typeof window !== 'undefined'
+export const defaultThemes: Theme[] = ['dark', 'light']
+
+export function isTheme<T extends string>(themes: (Theme | T)[], tested: string): tested is T {
   return themes.some(theme => theme === tested)
 }
 
-export const isBrowser = typeof window !== 'undefined'
+export function setLocalSettingWithTTL<T>(theme: T | Theme) {
+  const now = new Date()
 
-export function assertNever(x: never): never {
-  throw new Error(`Unexpected object: ${x}`)
+  localStorage.setItem(
+    'theme',
+    JSON.stringify({
+      value: theme,
+      expire: now.getTime() + EXPIRE_DURATION,
+    })
+  )
 }
 
-export function getInitialTheme(): Theme {
-  const localSetting = localStorage.getItem('theme')
+export function getLocalSettingWithTTL<T>(): T | Theme | null {
+  const storedThemeString = localStorage.getItem('theme')
 
-  if (localSetting && isTheme(localSetting)) {
+  if (!storedThemeString) {
+    return null
+  }
+
+  const storedTheme = JSON.parse(storedThemeString)
+  const now = new Date()
+
+  if (now.getTime() > storedTheme.expire) {
+    localStorage.removeItem('theme')
+    return null
+  }
+
+  return storedTheme.value
+}
+
+export function getInitialTheme<T extends string>(
+  themes: (Theme | T)[],
+  defaultTheme?: Theme | T
+): Theme | T {
+  if (!isBrowser) {
+    return defaultTheme ?? 'light'
+  }
+
+  if (defaultTheme) {
+    return defaultTheme
+  }
+
+  const localSetting = getLocalSettingWithTTL<T>()
+
+  if (localSetting && isTheme<T>(themes, localSetting)) {
     return localSetting
   }
 
@@ -24,25 +62,23 @@ export function getInitialTheme(): Theme {
       ? 'dark'
       : 'light'
 
-  if (isTheme(browserSetting)) {
+  if (isTheme<T>(themes, browserSetting)) {
     return browserSetting
   }
 
-  return 'light'
+  return defaultTheme ?? 'light'
 }
 
-export function setLightTheme() {
-  if (document.body.classList.contains('theme-dark')) {
-    document.body.classList.replace('theme-dark', 'theme-light')
-  } else {
-    document.body.classList.add('theme-light')
+export function setBodyClassList<T extends string>(themes: (Theme | T)[], theme: Theme | T): void {
+  const bodyThemeClassList = themes.find(theme => document.body.classList.contains(theme))
+
+  if (bodyThemeClassList && bodyThemeClassList === theme) {
+    return
   }
-}
 
-export function setDarkTheme() {
-  if (document.body.classList.contains('theme-light')) {
-    document.body.classList.replace('theme-light', 'theme-dark')
+  if (bodyThemeClassList === undefined) {
+    document.body.classList.add(theme)
   } else {
-    document.body.classList.add('theme-dark')
+    document.body.classList.replace(bodyThemeClassList, theme)
   }
 }

@@ -22,7 +22,7 @@
 
 
 <!-- TABLE OF CONTENTS -->
-<summary><h2 style="display: inline-block">Table of Contents</h2></summary>
+<h2 style="display: inline-block">Table of Contents</h2>
 <ol>
   <li>
     <a href="#getting-started">Getting Started</a>
@@ -84,7 +84,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Antoine Lin - [@vahilloff](https://twitter.com/vahilloff) - contact@antoinelin.com
 
-Project Link: [https://github.com/toinelin/react-locomotive-scroll](https://github.com/toinelin/react-locomotive-scroll)
+Project Link: [https://github.com/toinelin/react-themes](https://github.com/toinelin/react-themes)
 
 
 

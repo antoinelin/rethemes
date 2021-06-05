@@ -1,3 +1,2 @@
-export { ThemeContext, ThemeProvider } from './Theme.context'
-export { useTheme } from './Theme.hook'
-export type { Theme, ThemeValue } from './Theme.types'
+export { create } from './Theme.context'
+export type { Props as ThemeProps, Theme, ThemeValue } from './Theme.types'

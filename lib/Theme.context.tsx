@@ -1,41 +1,47 @@
-import { createContext, useEffect, useState } from 'react'
-import { Props, Theme, ThemeContext as Context } from './Theme.types'
-import { assertNever, getInitialTheme, isBrowser, setDarkTheme, setLightTheme } from './Theme.utils'
+import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { ContextValue, Props, ThemeValue } from './Theme.types'
+import {
+  defaultThemes,
+  getInitialTheme,
+  getLocalSettingWithTTL,
+  isBrowser,
+  setBodyClassList,
+  setLocalSettingWithTTL,
+} from './Theme.utils'
 
-export const ThemeContext = createContext<Context>({
-  activeTheme: 'light',
-  setActiveTheme: () => null,
-})
+export function create<T extends string>({
+  themes: customThemes,
+  defaultTheme,
+  disableAutoDetection = false,
+}: Props<T>) {
+  const themes = customThemes ? [...defaultThemes, ...customThemes] : defaultThemes
 
-export function ThemeProvider({ children, defaultTheme }: WithChildren<Props>) {
-  const colorScheme = isBrowser ? getInitialTheme() : defaultTheme
-  const [activeTheme, setActiveTheme] = useState<Theme>(defaultTheme ?? colorScheme)
+  const ThemeContext = createContext<ContextValue<T>>({
+    activeTheme: 'light',
+    setActiveTheme: () => null,
+  })
 
-  useEffect(() => {
-    switch (activeTheme) {
-      case 'light': {
-        setLightTheme()
-        break
+  const ThemeProvider = ({ children }: WithChildren) => {
+    const [activeTheme, setActiveTheme] = useState<typeof themes[number]>(
+      getInitialTheme<T>(themes, defaultTheme)
+    )
+
+    useEffect(() => {
+      setBodyClassList(themes, activeTheme)
+      const localSetting = getLocalSettingWithTTL<T>()
+
+      if (!localSetting || activeTheme !== localSetting) {
+        setLocalSettingWithTTL(activeTheme)
       }
-      case 'dark': {
-        setDarkTheme()
-        break
-      }
-      default: {
-        assertNever(activeTheme)
-        break
-      }
-    }
-
-    if (activeTheme !== localStorage.getItem('theme')) {
-      localStorage.setItem('theme', activeTheme)
-    }
+    }, [activeTheme])
 
     useEffect(() => {
       const getColorScheme = (event: MediaQueryListEvent) => {
         const newColorScheme = event.matches ? 'dark' : 'light'
 
-        setActiveTheme(newColorScheme)
+        if (!disableAutoDetection) {
+          setActiveTheme(newColorScheme)
+        }
       }
 
       if (isBrowser && window.matchMedia) {
@@ -50,14 +56,38 @@ export function ThemeProvider({ children, defaultTheme }: WithChildren<Props>) {
         }
       }
     }, [])
-  }, [activeTheme])
 
-  return (
-    <ThemeContext.Provider value={{ activeTheme, setActiveTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  )
+    return (
+      <ThemeContext.Provider
+        value={useMemo(() => ({ activeTheme, setActiveTheme }), [activeTheme])}
+      >
+        {children}
+      </ThemeContext.Provider>
+    )
+  }
+
+  const useTheme = (): ThemeValue<T> => {
+    const { activeTheme, setActiveTheme } = useContext(ThemeContext)
+
+    const themesToMap = useMemo(
+      () =>
+        themes.map(theme => ({
+          key: theme,
+          onClick: () => setActiveTheme(theme),
+        })),
+      []
+    )
+
+    return {
+      activeTheme,
+      setActiveTheme,
+      themes: themesToMap,
+    }
+  }
+
+  ThemeContext.displayName = 'ThemeContext'
+  ThemeProvider.displayName = 'ThemeProvider'
+  useTheme.displayName = 'useTheme'
+
+  return { ThemeProvider, useTheme }
 }
-
-ThemeContext.displayName = 'ThemeContext'
-ThemeProvider.displayName = 'ThemeProvider'

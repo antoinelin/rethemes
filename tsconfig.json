@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "outDir": "./module",
+    "sourceMap": false,
+    "declaration": true,
+    "strict": true,
+    "noUnusedLocals": false,
+    "skipLibCheck": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "removeComments": false,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "target": "ES2015",
+    "importHelpers": true,
+    "jsx": "react-jsx",
+    "lib": [
+      "DOM",
+      "ESNext"
+    ],
+    "typeRoots" : [
+      "./node_modules/@types",
+      "./lib/@types"
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "*": ["*"],
+      "tslib": ["node_modules/tslib"]
+    }
+  },
+  "include": [
+    "./lib/**/*"
+, "@types"  ],
+  "exclude": [
+    "./module",
+    "node_modules"
+  ]
+}

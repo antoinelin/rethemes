@@ -2,7 +2,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/toinelin/rethemes">
-    <img src="https://user-images.githubusercontent.com/11920757/120935076-5a5ef780-c701-11eb-9ab4-ba89dffa15df.png" alt="Logo" >
+    <img src="https://user-images.githubusercontent.com/11920757/120940333-095cfc80-c71d-11eb-91dc-9e29b89a8d29.png" alt="Logo" >
   </a>
 
   <p align="center">

@@ -197,20 +197,22 @@ Then use them on your CSS files:
 ## API
 
 #### `create` arguments
-| Option                  | Type                   | Required  | Description                        |
-| ----------------------- | ----------- -----------| --------- | -----------------------------------|
-| `themes`                | `string[]`             | true      | List of themes you want to use                                                          |
-| `defaultTheme`          | `string extends Theme` | true      | Theme you would like to use as default. Based on `themes`. If `defaultTheme` is not includes in `themes` it will be added. |
-| `expiryDuration`        | `number`               | false     | Add expiration to the preference stored on `localStorage`                                               |
+| Option                  | Type                   | Required  | Description                                               |
+| ----------------------- | ----------- -----------| --------- | ----------------------------------------------------------|
+| `themes`                | `string[]`             | true      | List of themes you want to use                            |
+| `defaultTheme`          | `string extends Theme` | true      | Theme you would like to use as default.                   |
+| `expiryDuration`        | `number`               | false     | Add expiration to the preference stored on `localStorage` |
 
 </br>
 
+Note: `defaultTheme` is Based on `themes`. If `defaultTheme` is not includes in `themes` it will be added.
+
 #### `useTheme` returns
-| Option                  | Type                                    | Description                                                 |
-| ----------------------- | ----------------------------------------| ------------------------------------------------------------|
-| `activeTheme`           | `Theme`                                 | List of themes you want to use                              |
-| `setActiveTheme`        | `(theme: Theme) => void`                | Method to trigger to set active theme                       |
-| `themes`                | { key: Theme, setActive: () => void }[] | List of themes to map on, helping you create a theme picker |
+| Option                  | Type                                      | Description                                                 |
+| ----------------------- | ------------------------------------------| ------------------------------------------------------------|
+| `activeTheme`           | `Theme`                                   | List of themes you want to use                              |
+| `setActiveTheme`        | `(theme: Theme) => void`                  | Method to trigger to set active theme                       |
+| `themes`                | `{ key: Theme, setActive: () => void }[]` | List of themes to map on, helping you create a theme picker |
 
 </br>
 

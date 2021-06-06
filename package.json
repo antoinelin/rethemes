@@ -1,6 +1,6 @@
 {
   "name": "rethemes",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Manage color themes in your React application",
   "main": "module/index.js",
   "module": "module/index.js",

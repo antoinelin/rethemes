@@ -2,6 +2,7 @@
   "git": {
     "requireBranch": "main",
     "requireCommits": true,
+    "requireUpstream": false,
     "requireCleanWorkingDir": false,
     "addFiles": ["package.json", "CHANGELOG.md"]
   },

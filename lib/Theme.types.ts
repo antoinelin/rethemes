@@ -1,21 +1,21 @@
 export type Theme = 'light' | 'dark'
 
-export interface Props<T> {
-  themes?: T[]
-  defaultTheme?: Theme | T
-  disableAutoDetection?: boolean
+export interface Props<T extends string = Theme> {
+  themes: T[]
+  defaultTheme: T
+  expiryDuration?: number
 }
 
-export interface ContextValue<T> {
-  activeTheme: Theme | T
-  setActiveTheme: (theme: Theme | T) => void
+export interface ContextValue<T extends string> {
+  activeTheme: T
+  setActiveTheme: (theme: T) => void
 }
 
-export interface ThemeValue<T> {
-  activeTheme: Theme | T
-  setActiveTheme: (theme: Theme | T) => void
+export interface ThemeValue<T extends string> {
+  activeTheme: T
+  setActiveTheme: (theme: T) => void
   themes: {
-    key: string
-    onClick: () => void
+    key: T
+    setActive: () => void
   }[]
 }

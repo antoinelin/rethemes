@@ -1,27 +1,36 @@
 import { Theme } from './Theme.types'
 
-const EXPIRE_DURATION = 24 * 60 * 60 * 1000 // 24 hours
-
 export const isBrowser = typeof window !== 'undefined'
-export const defaultThemes: Theme[] = ['dark', 'light']
 
-export function isTheme<T extends string>(themes: (Theme | T)[], tested: string): tested is T {
+export function containsStandardThemes(themes: string[]): themes is Theme[] {
+  return themes.includes('light') && themes.includes('dark')
+}
+
+export function isTheme<T extends string>(themes: T[], tested: string): tested is T {
   return themes.some(theme => theme === tested)
 }
 
-export function setLocalSettingWithTTL<T>(theme: T | Theme) {
+export function addDefaultThemeToThemes<T>(themes: T[], defaultTheme: T): T[] {
+  if (themes.includes(defaultTheme)) {
+    return themes
+  }
+
+  return [...themes, defaultTheme]
+}
+
+export function setLocalSettingWithTTL<T>(theme: T, ttl = 0) {
   const now = new Date()
 
   localStorage.setItem(
     'theme',
     JSON.stringify({
       value: theme,
-      expire: now.getTime() + EXPIRE_DURATION,
+      expire: now.getTime() + ttl,
     })
   )
 }
 
-export function getLocalSettingWithTTL<T>(): T | Theme | null {
+export function getLocalSettingWithTTL<T>(): T | null {
   const storedThemeString = localStorage.getItem('theme')
 
   if (!storedThemeString) {
@@ -39,15 +48,8 @@ export function getLocalSettingWithTTL<T>(): T | Theme | null {
   return storedTheme.value
 }
 
-export function getInitialTheme<T extends string>(
-  themes: (Theme | T)[],
-  defaultTheme?: Theme | T
-): Theme | T {
+export function getInitialTheme<T extends string>(themes: T[], defaultTheme: T): T {
   if (!isBrowser) {
-    return defaultTheme ?? 'light'
-  }
-
-  if (defaultTheme) {
     return defaultTheme
   }
 
@@ -57,19 +59,21 @@ export function getInitialTheme<T extends string>(
     return localSetting
   }
 
-  const browserSetting =
-    window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-      ? 'dark'
-      : 'light'
+  if (containsStandardThemes(themes)) {
+    const browserSetting =
+      window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark'
+        : 'light'
 
-  if (isTheme<T>(themes, browserSetting)) {
-    return browserSetting
+    if (isTheme<T>(themes, browserSetting)) {
+      return browserSetting
+    }
   }
 
-  return defaultTheme ?? 'light'
+  return defaultTheme
 }
 
-export function setBodyClassList<T extends string>(themes: (Theme | T)[], theme: Theme | T): void {
+export function setBodyClassList<T extends string>(themes: T[], theme: T): void {
   const bodyThemeClassList = themes.find(theme =>
     document.body.classList.contains(`theme-${theme}`)
   )

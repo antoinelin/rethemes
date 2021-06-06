@@ -1,58 +1,52 @@
 import { createContext, useContext, useEffect, useMemo, useState } from 'react'
-import { ContextValue, Props, ThemeValue } from './Theme.types'
+import { ContextValue, Props, Theme, ThemeValue } from './Theme.types'
 import {
-  defaultThemes,
+  addDefaultThemeToThemes,
+  containsStandardThemes,
   getInitialTheme,
   getLocalSettingWithTTL,
-  isBrowser,
   setBodyClassList,
   setLocalSettingWithTTL,
 } from './Theme.utils'
 
-export function create<T extends string>({
-  themes: customThemes,
-  defaultTheme,
-  disableAutoDetection = false,
-}: Props<T>) {
-  const themes = customThemes ? [...defaultThemes, ...customThemes] : defaultThemes
+export function create<T extends string = Theme>(props: Props<T>) {
+  const themes: T[] = props?.themes ?? addDefaultThemeToThemes(props.themes, props.defaultTheme)
 
   const ThemeContext = createContext<ContextValue<T>>({
-    activeTheme: 'light',
+    activeTheme: props.defaultTheme,
     setActiveTheme: () => null,
   })
 
   const ThemeProvider = ({ children }: WithChildren) => {
-    const [activeTheme, setActiveTheme] = useState<typeof themes[number]>(
-      getInitialTheme<T>(themes, defaultTheme)
-    )
+    const [activeTheme, setActiveTheme] = useState(getInitialTheme<T>(themes, props.defaultTheme))
 
     useEffect(() => {
       setBodyClassList(themes, activeTheme)
       const localSetting = getLocalSettingWithTTL<T>()
 
       if (!localSetting || activeTheme !== localSetting) {
-        setLocalSettingWithTTL(activeTheme)
+        setLocalSettingWithTTL(activeTheme, props?.expiryDuration)
       }
     }, [activeTheme])
 
     useEffect(() => {
+      const hasDefaultTheme = containsStandardThemes(themes)
+      const prefersDarkColorQuery = '(prefers-color-scheme: dark)'
       const getColorScheme = (event: MediaQueryListEvent) => {
         const newColorScheme = event.matches ? 'dark' : 'light'
 
-        if (!disableAutoDetection) {
-          setActiveTheme(newColorScheme)
-        }
+        // this function is called only if `themes` contains 'light' and `dark`
+        // @ts-expect-error
+        setActiveTheme(newColorScheme)
       }
 
-      if (isBrowser && window.matchMedia) {
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', getColorScheme)
+      if (window.matchMedia && hasDefaultTheme) {
+        window.matchMedia(prefersDarkColorQuery).addEventListener('change', getColorScheme)
       }
 
       return () => {
-        if (window.matchMedia) {
-          window
-            .matchMedia('(prefers-color-scheme: dark)')
-            .removeEventListener('change', getColorScheme)
+        if (window.matchMedia && hasDefaultTheme) {
+          window.matchMedia(prefersDarkColorQuery).removeEventListener('change', getColorScheme)
         }
       }
     }, [])
@@ -73,7 +67,7 @@ export function create<T extends string>({
       () =>
         themes.map(theme => ({
           key: theme,
-          onClick: () => setActiveTheme(theme),
+          setActive: () => setActiveTheme(theme),
         })),
       []
     )

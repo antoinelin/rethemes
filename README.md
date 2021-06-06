@@ -1,7 +1,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
-  <a href="https://github.com/toinelin/react-themes">
+  <a href="https://github.com/toinelin/rethemes">
     <img src="https://user-images.githubusercontent.com/11920757/120935076-5a5ef780-c701-11eb-9ab4-ba89dffa15df.png" alt="Logo" >
   </a>
 
@@ -9,11 +9,11 @@
     Manage color themes in your React application
     <br />
     <br />
-    <!-- <a href="https://github.com/toinelin/react-themes">View Demo</a>
+    <!-- <a href="https://github.com/toinelin/rethemes">View Demo</a>
     · -->
-    <a href="https://github.com/toinelin/react-themes/issues">Report Bug</a>
+    <a href="https://github.com/toinelin/rethemes/issues">Report Bug</a>
     ·
-    <a href="https://github.com/toinelin/react-themes/issues">Request Feature</a>
+    <a href="https://github.com/toinelin/rethemes/issues">Request Feature</a>
   </p>
 </p>
 
@@ -44,13 +44,13 @@ To get a local copy up and running follow these simple steps.
 ### Installation
 
 ```sh
-$ npm install react-themes
+$ npm install rethemes
 ```
 
 or using [Yarn](https://yarnpkg.com/)
 
 ```sh
-$ yarn add react-themes
+$ yarn add rethemes
 ```
 
 
@@ -60,11 +60,11 @@ $ yarn add react-themes
 
 ### Create your `theme.js` file
 
-First, import `create` from `react-themes` and use it to create your context provider: `ThemeProvider`, and React hook: `useTheme`
+First, import `create` from `rethemes` and use it to create your context provider: `ThemeProvider`, and React hook: `useTheme`
 
 ```javascript
 // theme.js
-import { create } from 'react-themes'
+import { create } from 'rethemes'
 
 const { ThemeProvider, useTheme } = create({
   themes: ['light', 'dark'],
@@ -160,7 +160,7 @@ const setHighContrastTheme = () => {
 // `themes` will contains colorblind and high-contrast too
 ```
 
-### Manage CSS colors with `react-themes`
+### Manage CSS colors with `rethemes`
 
 The library will automatically append a classlist related to the active theme to the `body` HTML element with the `theme` prefix.
 
@@ -231,7 +231,7 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 Antoine Lin - [@vahilloff](https://twitter.com/vahilloff) - contact@antoinelin.com
 
-Project Link: [https://github.com/toinelin/react-themes](https://github.com/toinelin/react-themes)
+Project Link: [https://github.com/toinelin/rethemes](https://github.com/toinelin/rethemes)
 
 <!-- ACKNOWLEDGEMENTS -->
 ## Acknowledgements

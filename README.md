@@ -208,6 +208,8 @@ Then use them on your CSS files:
 
 Note: `defaultTheme` is Based on `themes`. If `defaultTheme` is not includes in `themes` it will be added.
 
+Note 2: all strings in `themes` are inferred as a union type (Theme) dispatched to the context and hook (you will have the auto-completion each time you should be able to update or access to it).
+
 <!-- CONTRIBUTING -->
 ## Contributing
 

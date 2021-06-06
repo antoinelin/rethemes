@@ -197,26 +197,16 @@ Then use them on your CSS files:
 ## API
 
 #### `create` arguments
+
 | Option                  | Type                                      | Description                                                 |
-| ----------------------- | ----------- ------------------------------| ------------------------------------------------------------|
+| ----------------------- | ------------------------------------------| ------------------------------------------------------------|
 | `themes`                | `string[]`                                | List of themes you want to use                              |
-| `defaultTheme`          | `string extends Theme`                    | Theme you would like to use as default.                     |
-| `expiryDuration`        | `number`                                  | Add expiration to the preference stored on `localStorage`   |
+| `defaultTheme`          | `string`                                  | Theme you would like to use as default.                     |
+| `expiryDuration`        | `number`                                  | List of themes to map on, helping you create a theme picker |
 
 </br>
 
 Note: `defaultTheme` is Based on `themes`. If `defaultTheme` is not includes in `themes` it will be added.
-
-#### `useTheme` returns
-| Option                  | Type                                      | Description                                                 |
-| ----------------------- | ------------------------------------------| ------------------------------------------------------------|
-| `activeTheme`           | `Theme`                                   | Current theme in use                                        |
-| `setActiveTheme`        | `(theme: Theme) => void`                  | Method to trigger to set active theme                       |
-| `themes`                | `{ key: Theme, setActive: () => void }[]` | List of themes to map on, helping you create a theme picker |
-
-</br>
-
-Note for TypeScript: all strings in `themes` are inferred as a union type (Theme) dispatched to the context and hook (you will have the right theme auto-completion each time you should be able to update or access it).
 
 <!-- CONTRIBUTING -->
 ## Contributing

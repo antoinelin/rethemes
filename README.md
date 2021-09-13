@@ -105,7 +105,7 @@ Use the hook `useTheme` to get the active theme and the method to change active 
 import { useTheme } from './theme.js'
 
 export function ThemePicker() {
-  const { activeTheme, setActiveTheme, themes} = useTheme
+  const { activeTheme, setActiveTheme, themes } = useTheme
 
   const setDarkTheme = () => {
     setActiveTheme('dark')

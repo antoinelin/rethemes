@@ -5,7 +5,7 @@ import {
   containsStandardThemes,
   getInitialTheme,
   getLocalSettingWithTTL,
-  setBodyClassList,
+  setClassList,
   setLocalSettingWithTTL,
 } from './Theme.utils'
 
@@ -21,7 +21,7 @@ export function create<T extends string = Theme>(props: Props<T>) {
     const [activeTheme, setActiveTheme] = useState(getInitialTheme<T>(themes, props.defaultTheme))
 
     useEffect(() => {
-      setBodyClassList(themes, activeTheme)
+      setClassList(themes, activeTheme)
       const localSetting = getLocalSettingWithTTL<T>()
 
       if (!localSetting || activeTheme !== localSetting) {

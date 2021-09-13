@@ -73,18 +73,18 @@ export function getInitialTheme<T extends string>(themes: T[], defaultTheme: T):
   return defaultTheme
 }
 
-export function setBodyClassList<T extends string>(themes: T[], theme: T): void {
-  const bodyThemeClassList = themes.find(theme =>
-    document.body.classList.contains(`theme-${theme}`)
+export function setClassList<T extends string>(themes: T[], theme: T): void {
+  const themeClassList = themes.find(theme =>
+    document.documentElement.classList.contains(`theme-${theme}`)
   )
 
-  if (bodyThemeClassList && bodyThemeClassList === theme) {
+  if (themeClassList && themeClassList === theme) {
     return
   }
 
-  if (bodyThemeClassList === undefined) {
-    document.body.classList.add(`theme-${theme}`)
+  if (themeClassList === undefined) {
+    document.documentElement.classList.add(`theme-${theme}`)
   } else {
-    document.body.classList.replace(`theme-${bodyThemeClassList}`, `theme-${theme}`)
+    document.documentElement.classList.replace(`theme-${themeClassList}`, `theme-${theme}`)
   }
 }
